@@ -12,74 +12,67 @@ import entity.HelloWorld;
  * @author Jean-Aymeric Diet
  */
 public final class Model extends Observable implements IModel {
-
-	/** The helloWorld. */
-	private HelloWorld helloWorld;
-
-	/**
-	 * Instantiates a new model.
-	 */
-	public Model() {
-		this.helloWorld = new HelloWorld();
+	private String level;
+	private int time;
+	private int timeLeft;
+	private Entity[][] map;
+	private int point;
+	private Character player;
+	
+	public Model(int levelID) {
+		
 	}
-
-	/**
-     * Gets the hello world.
-     *
-     * @return the hello world
-     */
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see contract.IModel#getMessage()
-	 */
-	public HelloWorld getHelloWorld() {
-		return this.helloWorld;
-	}
-
-	/**
-     * Sets the hello world.
-     *
-     * @param helloWorld
-     *            the new hello world
-     */
-	private void setHelloWorld(final HelloWorld helloWorld) {
-		this.helloWorld = helloWorld;
-		this.setChanged();
-		this.notifyObservers();
-	}
-
-	/**
-     * Load hello world.
-     *
-     * @param code
-     *            the code
-     */
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see contract.IModel#getMessage(java.lang.String)
-	 */
-	public void loadHelloWorld(final String code) {
-		try {
-			final DAOHelloWorld daoHelloWorld = new DAOHelloWorld(DBConnection.getInstance().getConnection());
-			this.setHelloWorld(daoHelloWorld.find(code));
-		} catch (final SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-     * Gets the observable.
-     *
-     * @return the observable
-     */
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see contract.IModel#getObservable()
-	 */
 	public Observable getObservable() {
-		return this;
+		
 	}
+	private void loadLevel(int levelID) {
+		
+	}
+	private void buildmap() {
+		
+	}
+	public int getTime () {
+		
+	}
+	public void setTimeLeft(int Time) {
+		
+	}
+	public int getTimeLeft(int Time) {
+		
+	}
+	public int getDiamonds() {
+	
+	}
+	public void setDiamondsLeft(int Diamonds) {
+	
+	}
+	public int getDiamondsLeft() {
+		
+	}
+	public int  getPoint() {
+		
+	}
+	public void setPoint(int score) {
+		
+	}
+	public Entity[][] getMap(){
+		
+	}
+	public Character getPlayer() {
+		
+	}
+	public void updateEntity(int posX,int posY) {
+		
+	}
+	public void updateStats() {
+		
+	}
+	public void updateEntitiesStats() {
+		
+	}
+	public void updateSlidingBlocks() {
+		
+	}
+	
+	
 }
