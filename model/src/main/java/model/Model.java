@@ -73,6 +73,5 @@ public final class Model extends Observable implements IModel {
 	public void updateSlidingBlocks() {
 		
 	}
-	
-	
+
 }
