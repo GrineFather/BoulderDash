@@ -6,13 +6,18 @@ package contract;
  * @author Jean-Aymeric Diet
  */
 public enum ControllerOrder {
-
-	/** The English. */
-	English,
-	/** The French. */
-	Francais,
-	/** The Deutch. */
-	Deutsch,
-	/** The Indonesia. */
-	Indonesia
+	/** Turn Left. */
+	LEFT,
+	/** Turn Right. */
+	RIGHT,
+	/** Turn Up. */
+	UP,
+	/** Turn Down. */
+	DOWN,
+	/** Stand By*/
+	STAND_BY,
+	/** Win */
+	WIN,
+	/** LOSE */
+	LOSE
 }

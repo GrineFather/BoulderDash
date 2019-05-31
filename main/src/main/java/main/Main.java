@@ -7,7 +7,7 @@ package main;
 import contract.ControllerOrder;
 import controller.Controller;
 import model.Model;
-import view.View;
+import view.ViewFrame;
 
 /**
  * The Class Main.
@@ -23,12 +23,12 @@ public abstract class Main {
      *            the arguments
      */
     public static void main(final String[] args) {
-        final Model model = new Model();
-        final View view = new View(model);
-        final Controller controller = new Controller(view, model);
+        Model model = new Model();
+        ViewFrame view = new ViewFrame(model);
+        model.Run();
+        Controller controller = new Controller(view, model);
         view.setController(controller);
 
         controller.control();
-        controller.orderPerform(ControllerOrder.English);
     }
 }

@@ -4,20 +4,30 @@ import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import contract.ControllerOrder;
 import contract.IController;
 import contract.IModel;
+import contract.IView;
 
 /**
  * The Class ViewFrame.
  *
  * @author Jean-Aymeric Diet
  */
-class ViewFrame extends JFrame implements KeyListener {
+public class ViewFrame extends JFrame implements IView, KeyListener, Observer{
 
+	private ViewPanel panneau;
+	//public Player p1;
+	
 	/** The model. */
 	private IModel						model;
 
@@ -25,61 +35,6 @@ class ViewFrame extends JFrame implements KeyListener {
 	private IController				controller;
 	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= -697358409737458175L;
-
-	/**
-	 * Instantiates a new view frame.
-	 *
-	 * @param model
-	 *          the model
-	 * @throws HeadlessException
-	 *           the headless exception
-	 */
-	public ViewFrame(final IModel model) throws HeadlessException {
-		this.buildViewFrame(model);
-	}
-
-	/**
-	 * Instantiates a new view frame.
-	 *
-	 * @param model
-	 *          the model
-	 * @param gc
-	 *          the gc
-	 */
-	public ViewFrame(final IModel model, final GraphicsConfiguration gc) {
-		super(gc);
-		this.buildViewFrame(model);
-	}
-
-	/**
-	 * Instantiates a new view frame.
-	 *
-	 * @param model
-	 *          the model
-	 * @param title
-	 *          the title
-	 * @throws HeadlessException
-	 *           the headless exception
-	 */
-	public ViewFrame(final IModel model, final String title) throws HeadlessException {
-		super(title);
-		this.buildViewFrame(model);
-	}
-
-	/**
-	 * Instantiates a new view frame.
-	 *
-	 * @param model
-	 *          the model
-	 * @param title
-	 *          the title
-	 * @param gc
-	 *          the gc
-	 */
-	public ViewFrame(final IModel model, final String title, final GraphicsConfiguration gc) {
-		super(title, gc);
-		this.buildViewFrame(model);
-	}
 
 	/**
 	 * Gets the controller.
@@ -96,7 +51,7 @@ class ViewFrame extends JFrame implements KeyListener {
 	 * @param controller
 	 *          the new controller
 	 */
-	protected void setController(final IController controller) {
+	public void setController(final IController controller) {
 		this.controller = controller;
 	}
 
@@ -115,7 +70,7 @@ class ViewFrame extends JFrame implements KeyListener {
 	 * @param model
 	 *          the new model
 	 */
-	private void setModel(final IModel model) {
+	private void setModel(final IModel model){
 		this.model = model;
 	}
 
@@ -125,15 +80,30 @@ class ViewFrame extends JFrame implements KeyListener {
 	 * @param model
 	 *          the model
 	 */
-	private void buildViewFrame(final IModel model) {
+	public ViewFrame(IModel model) {
+		this.panneau = new ViewPanel();
 		this.setModel(model);
+		this.model.getObservable().addObserver(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.addKeyListener(this);
-		this.setContentPane(new ViewPanel(this));
-		this.setSize(400 + this.getInsets().left + this.getInsets().right, 60 + this.getInsets().top + this.getInsets().bottom);
+		this.setContentPane(panneau);
+		this.setSize(485, 350);
 		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+		this.setTitle("Boulder dash");
+		try {
+			this.setIconImage(ImageIO.read(new File("image\\P.png")));
+		} catch (IOException e) {
+
+		}
+		this.setContentPane(this.panneau);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+		this.addKeyListener(this);
 	}
+	
 
 	/**
 	 * Prints the message.
@@ -144,31 +114,55 @@ class ViewFrame extends JFrame implements KeyListener {
 	public void printMessage(final String message) {
 		JOptionPane.showMessageDialog(null, message);
 	}
+	
+	public ControllerOrder KeyCode(int keycode){
+        switch(keycode){
+            case KeyEvent.VK_LEFT:
+                return ControllerOrder.LEFT;
+            case KeyEvent.VK_RIGHT:
+                return ControllerOrder.RIGHT;
+            case KeyEvent.VK_UP:
+                return ControllerOrder.UP;
+            case KeyEvent.VK_DOWN:
+                return ControllerOrder.DOWN;
+            default:
+                return ControllerOrder.STAND_BY;
+        }
+	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		this.getController().orderPerform(this.KeyCode(e.getKeyCode()));
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
-	public void keyTyped(final KeyEvent e) {
-
+	public void update(final Observable arg0, final Object arg1) {
+		this.repaint();
+		int[] Player;
+		Player = this.model.getPositionPlayer();
+		this.panneau.UpdateMap(this.model.getMap());
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
-	 */
-	public void keyPressed(final KeyEvent e) {
-		this.getController().orderPerform(View.keyCodeToControllerOrder(e.getKeyCode()));
-	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
-	 */
-	public void keyReleased(final KeyEvent e) {
-
-	}
 }
